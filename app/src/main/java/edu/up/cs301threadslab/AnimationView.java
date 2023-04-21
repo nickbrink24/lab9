@@ -1,10 +1,13 @@
 package edu.up.cs301threadslab;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
+import java.lang.Thread;
 
 import java.util.ArrayList;
 
@@ -82,6 +85,12 @@ public class AnimationView extends SurfaceView{
         }
 
         postInvalidate();
+        try {
+            sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }//draw
 
     /** This method is called each time the seekbar's progress changes.  This will always be a
