@@ -24,6 +24,8 @@ public class StarAnimation extends Animation {
     /** ctor expects to be told the size of the animation canvas */
     public StarAnimation(int initWidth, int initHeight) {
         super(initWidth, initHeight);
+        ThreadedStarAnimation TSA = new ThreadedStarAnimation(this);
+        TSA.start();
     }
 
     /** whenever the canvas size changes, generate new stars */
@@ -46,25 +48,30 @@ public class StarAnimation extends Animation {
         int x = rand.nextInt(width);
         int y = rand.nextInt(height);
 
-
-        field.add(new Star(x, y));
+        synchronized (field) {
+            field.add(new Star(x, y));
+        }
     }//addStar
 
     /** removes a random star from the field */
     public void removeStar() {
-        if (field.size() > 100) {
-            int index = rand.nextInt(field.size());
-            field.remove(index);
+        synchronized (field) {
+            if (field.size() > 100) {
+                int index = rand.nextInt(field.size());
+                field.remove(index);
+            }
         }
     }//removeStar
 
     /** draws the next frame of the animation */
     @Override
     public void draw(Canvas canvas) {
-        for (Star s : field) {
-            s.draw(canvas);
-            if (this.twinkle) {
-                s.twinkle();
+        synchronized (field) {
+            for (Star s : field) {
+                s.draw(canvas);
+                if (this.twinkle) {
+                    s.twinkle();
+                }
             }
         }
 
