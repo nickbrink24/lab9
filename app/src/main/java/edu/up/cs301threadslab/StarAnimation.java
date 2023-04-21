@@ -71,11 +71,24 @@ public class StarAnimation extends Animation {
         this.twinkle = true;
     }//draw
 
-    /** the seekbar progress specifies the brightnes of the stars. */
+    /** the seekbar progress specifies the brightness of the stars. */
+    /** changed to control number of stars */
     @Override
     public void progressChange(int newProgress) {
-        int brightness = 255 - (newProgress * 2);
+        int brightness = 255;
         Star.starPaint.setColor(Color.rgb(brightness, brightness, brightness));
         this.twinkle = false;
+
+        while(field.size() > 100) {
+            removeStar();
+        }
+
+        for(int i = 0; i < newProgress; i++) {
+            for(int j = 0; j < 9; j++) {
+                addStar();
+            }
+        }
+
+        Log.i("Draw", String.format("%d:%d", newProgress, field.size()));
     }
 }//class StarAnimation
